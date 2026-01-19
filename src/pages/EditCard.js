@@ -1,14 +1,29 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import CardForm from "../components/CardForm";
-import { getCards, updateCard } from "../services/api";
 
-export default function EditCard() {
-  /* TODO: Complete the EditCard page
-    - display a form for editing a card (use the CardForm component to display the form)
-    - handle form submission to call updateCard API
-    - handle loading, busy, and error states
-    - style as a form UI */
+export default function CardList() {
+  const [cards, setCards] = useState([]);
 
-  return <main></main>;
+  useEffect(() => {
+    fetch("http://localhost:3000/allcards")
+      .then((res) => res.json())
+      .then((data) => setCards(data))
+      .catch((err) => console.error(err));
+  }, []);
+
+  return (
+    <div>
+      <h1>Card List</h1>
+
+      {cards.length === 0 && <p>No cards found.</p>}
+
+      <ul>
+        {cards.map((card) => (
+          <li key={card.id}>
+            <strong>{card.title}</strong> — {card.description}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 }
+
