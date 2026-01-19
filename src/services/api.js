@@ -1,36 +1,48 @@
-/**
- * API Service (Create React App)
- *
- * 1) Create `.env` at project root
- * 2) Set: REACT_APP_API_URL=https://YOUR-BACKEND.onrender.com
- * 3) Restart `npm start`
- */
-const API_URL = process.env.REACT_APP_API_URL || "";
+// FRONTEND API SERVICE (React only)
 
-/**
- * TODO: If your backend routes differ, update the paths here.
- * Required endpoints:
- * - GET    /allcards
- * - POST   /addcard
- * - PUT    /updatecard/:id
- * - DELETE /deletecard/:id
- */
+const API_URL = "http://localhost:3000";
 
+// GET all cards
 export async function getCards() {
-  // GET /allcards (provided as reference)
   const res = await fetch(`${API_URL}/allcards`);
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (!res.ok) throw new Error("Failed to fetch cards");
   return res.json();
 }
 
-export function addCard(card) {
-  // TODO: implement POST /addcard
+// ADD card
+export async function addCard(card) {
+  const res = await fetch(`${API_URL}/addcard`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(card),
+  });
+
+  if (!res.ok) throw new Error("Failed to add card");
+  return res.json();
 }
 
-export function updateCard(id, card) {
-  // TODO: implement PUT /updatecard/:id
+// UPDATE card
+export async function updateCard(id, card) {
+  const res = await fetch(`${API_URL}/updatecard/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(card),
+  });
+
+  if (!res.ok) throw new Error("Failed to update card");
+  return res.json();
 }
 
-export function deleteCard(id) {
-  // TODO: implement DELETE /deletecard/:id
+// DELETE card
+export async function deleteCard(id) {
+  const res = await fetch(`${API_URL}/deletecard/${id}`, {
+    method: "DELETE",
+  });
+
+  if (!res.ok) throw new Error("Failed to delete card");
+  return res.json();
 }
