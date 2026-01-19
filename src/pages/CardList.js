@@ -8,47 +8,35 @@ export default function CardList() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
 
-  // fetch all cards
-  useEffect(() => {
-    async function fetchCards() {
-      try {
-        setLoading(true);
-        const data = await getCards();
-        setCards(data);
-      } catch (err) {
-        setError("Failed to load cards");
-      } finally {
-        setLoading(false);
-      }
+  async function load() {
+    try {
+      const data = await getCards();
+      setCards(data);
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
     }
+  }
 
-    fetchCards();
-  }, []);
-
-  // delete card
   async function handleDelete(card) {
     try {
-      setBusy(true);
       await deleteCard(card.id);
       setCards(cards.filter(c => c.id !== card.id));
-    } catch (err) {
-      setError("Failed to delete card");
+    } catch (error) {
+      setError(error.message);
     } finally {
       setBusy(false);
     }
   }
 
-  if (loading) {
-    return <main><p>Loading cards...</p></main>;
-  }
-
-  if (error) {
-    return <main><p>{error}</p></main>;
-  }
+  useEffect(() => {
+    load();
+  }, []);
 
   return (
     <main>
-      {busy && <p>Processing...</p>}
+      <h1>Card List</h1>
 
       <div>
         {cards.map(card => (
@@ -56,6 +44,7 @@ export default function CardList() {
             key={card.id}
             card={card}
             onDelete={() => handleDelete(card)}
+            disabled={busy}
           />
         ))}
       </div>
