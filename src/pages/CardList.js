@@ -50,11 +50,7 @@ export default function CardList() {
     <main>
       {busy && <p>Processing...</p>}
 
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(250px, 1fr))",
-        gap: "1rem"
-      }}>
+      <div className="card-list">
         {cards.map(card => (
           <Card
             key={card.id}
