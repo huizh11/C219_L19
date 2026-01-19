@@ -17,6 +17,4 @@ export default function Card({ card, onDelete, busy }) {
       <button onClick={() => onDelete(card)} disabled={busy}>Delete</button>
     </div>
   );
-
-  return <div></div>;
 }
