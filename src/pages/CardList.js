@@ -50,7 +50,7 @@ export default function CardList() {
     <main>
       {busy && <p>Processing...</p>}
 
-      <div className="card-list">
+      <div>
         {cards.map(card => (
           <Card
             key={card.id}
