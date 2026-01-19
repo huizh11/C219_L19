@@ -8,5 +8,16 @@ export default function Card({ card, onDelete, busy }) {
     - delete button calling onDelete with the card object
     - style as a card UI */
 
+      return (
+    <div>
+      <h3>{card.title}</h3>
+      <p>{card.description}</p>
+
+      <button onClick={onDelete}>
+        Delete
+      </button>
+    </div>
+  );
+
   return <div></div>;
 }
