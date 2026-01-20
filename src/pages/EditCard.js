@@ -1,54 +1,73 @@
 import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams, Link } from "react-router-dom";
 import CardForm from "../components/CardForm";
+
+// ✅ Matches your .env exactly
+const API_BASE = process.env.REACT_APP_API_URL;
 
 export default function EditCard() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [card, setCard] = useState(null);
+  const [initialValues, setInitialValues] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
-  const API_URL = process.env.REACT_APP_API_URL;
-
-  // Fetch existing card data
+  // Fetch existing card
   useEffect(() => {
-    fetch(`${API_URL}/cards/${id}`)
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Failed to fetch card");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setCard(data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError("Unable to load card data.");
-        setLoading(false);
-      });
-  }, [API_URL, id]);
+    async function fetchCard() {
+      setLoading(true);
+      setError("");
 
-  // Submit updated card
-  function handleUpdate(updatedCard) {
-    fetch(`${API_URL}/cards/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(updatedCard),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Update failed");
+      try {
+        if (!API_BASE) {
+          throw new Error("API URL is not configured");
         }
-        navigate("/cards");
-      })
-      .catch(() => {
-        setError("Failed to update card.");
+
+        const response = await fetch(`${API_BASE}/cards/${id}`);
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch card details");
+        }
+
+        const data = await response.json();
+        setInitialValues(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchCard();
+  }, [id]);
+
+  // Update card
+  async function handleSubmit(updatedCard) {
+    setSaving(true);
+    setError("");
+
+    try {
+      const response = await fetch(`${API_BASE}/cards/${id}`, {
+        method: "PUT", // change to PATCH if your backend uses PATCH
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(updatedCard),
       });
+
+      if (!response.ok) {
+        throw new Error("Failed to update card");
+      }
+
+      // redirect after success
+      navigate("/cards");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
   }
 
   if (loading) {
@@ -56,18 +75,26 @@ export default function EditCard() {
   }
 
   if (error) {
-    return <p style={{ color: "red" }}>{error}</p>;
+    return (
+      <div>
+        <p style={{ color: "red" }}>{error}</p>
+        <Link to="/cards">← Back to Cards</Link>
+      </div>
+    );
   }
 
   return (
-    <main style={{ padding: "2rem" }}>
-      <h1>Edit Card</h1>
+    <div>
+      <h2>Edit Card</h2>
 
       <CardForm
-        initialData={card}
-        onSubmit={handleUpdate}
-        submitLabel="Update Card"
+        initialValues={initialValues}
+        onSubmit={handleSubmit}
+        submitLabel={saving ? "Saving..." : "Update Card"}
+        disabled={saving}
       />
-    </main>
+
+      <Link to="/cards">← Back to Cards</Link>
+    </div>
   );
 }
