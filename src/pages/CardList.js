@@ -11,6 +11,7 @@ export default function CardList() {
   async function load() {
     try {
       const data = await getCards();
+      console.log("in load: "+data);
       setCards(data);
     } catch (error) {
       setError(error.message);
@@ -37,7 +38,8 @@ export default function CardList() {
   return (
     <main>
       <h1>Card List</h1>
-
+      {error && <p>{error}</p>}
+      {loading && <p>Loading...</p>}
       <div>
         {cards.map(card => (
           <Card

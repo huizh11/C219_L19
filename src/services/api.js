@@ -5,10 +5,8 @@ const API_URL = process.env.REACT_APP_API_URL;
 // GET all cards
 export async function getCards() {
   const res = await fetch(`${API_URL}/allcards`);
-  if (!res.ok) throw new Error("Failed to fetch cards");
-
-  const data = await res.json();
-  return data.cards; // ✅ FIX: return the array directly
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
 }
 
 // ADD card
