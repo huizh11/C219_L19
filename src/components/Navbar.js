@@ -42,9 +42,10 @@ export default function Navbar() {
         <Link to="/cards" style={linkStyle}>
           Cards
         </Link>
-        <Link to="/cards/new" style={linkStyle}>
+        <Link to="/add" style={linkStyle}>
           Add Card
         </Link>
+
       </div>
     </nav>
   );

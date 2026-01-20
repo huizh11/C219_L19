@@ -24,61 +24,93 @@ export default function CardForm({
     });
   }
 
-  const inputStyle = {
-    width: "100%",
-    padding: "14px 16px",
-    fontSize: "16px",
-    borderRadius: "8px",
-    border: "1px solid #ccc",
-    marginTop: "6px",
+  /* ---------- styles ---------- */
+
+  const formStyle = {
+    maxWidth: 480,
+    margin: "40px auto",
+    padding: "24px",
+    borderRadius: "12px",
+    backgroundColor: "#ffffff",
+    boxShadow: "0 10px 25px rgba(0,0,0,0.08)",
+    fontFamily: "system-ui, -apple-system, BlinkMacSystemFont",
   };
 
   const fieldStyle = {
+    marginBottom: "18px",
+  };
+
+  const labelStyle = {
+    display: "block",
+    fontWeight: 600,
+    marginBottom: "6px",
+    color: "#374151",
+  };
+
+  const inputStyle = {
+    width: "100%",
+    padding: "12px 14px",
+    fontSize: "15px",
+    borderRadius: "8px",
+    border: "1px solid #d1d5db",
+    outline: "none",
+  };
+
+  const errorStyle = {
+    backgroundColor: "#fee2e2",
+    color: "#b91c1c",
+    padding: "10px 12px",
+    borderRadius: "8px",
     marginBottom: "16px",
+    fontSize: "14px",
+  };
+
+  const buttonStyle = {
+    width: "100%",
+    padding: "12px",
+    fontSize: "16px",
+    fontWeight: 600,
+    backgroundColor: busy ? "#93c5fd" : "#2563eb",
+    color: "#ffffff",
+    border: "none",
+    borderRadius: "10px",
+    cursor: busy ? "not-allowed" : "pointer",
+    transition: "background-color 0.2s",
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ maxWidth: 500 }}>
-      {error && <p style={{ color: "red" }}>{error}</p>}
+    <form onSubmit={handleSubmit} style={formStyle}>
+      <h2 style={{ marginBottom: 20, textAlign: "center" }}>
+        {submitLabel}
+      </h2>
 
-      <label>
-        Card Name
+      {error && <div style={errorStyle}>{error}</div>}
+
+      <div style={fieldStyle}>
+        <label style={labelStyle}>Card Name</label>
         <input
           type="text"
           value={card_name}
           disabled={busy}
           onChange={(e) => setCardName(e.target.value)}
-          style={{ width: "100%", padding: 8 }}
+          style={inputStyle}
+          placeholder="Enter card name"
         />
-      </label>
+      </div>
 
-      <br /><br />
-
-      <label>
-        Card Image URL
+      <div style={fieldStyle}>
+        <label style={labelStyle}>Card Image URL</label>
         <input
           type="text"
           value={card_pic}
           disabled={busy}
           onChange={(e) => setCardPic(e.target.value)}
-          style={{ width: "100%", padding: 8 }}
+          style={inputStyle}
+          placeholder="https://example.com/image.jpg"
         />
-      </label>
+      </div>
 
-      <br /><br />
-
-      <button
-        type="submit"
-        disabled={busy}
-        style={{
-          padding: "0.6rem 1.2rem",
-          backgroundColor: "#2563eb",
-          color: "white",
-          border: "none",
-          borderRadius: 6,
-          cursor: busy ? "not-allowed" : "pointer",
-        }}
-      >
+      <button type="submit" disabled={busy} style={buttonStyle}>
         {busy ? "Saving..." : submitLabel}
       </button>
     </form>
