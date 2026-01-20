@@ -23,6 +23,7 @@ export async function addCard(card) {
   return res.json();
 }
 
+
 // UPDATE card
 export async function updateCard(id, card) {
   const res = await fetch(`${API_URL}/updatecard/${id}`, {
