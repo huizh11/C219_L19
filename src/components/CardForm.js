@@ -1,75 +1,101 @@
 import { useEffect, useState } from "react";
 
 export default function CardForm({
-  initialData = { title: "", description: "" },
+  initialValues,
   onSubmit,
   submitLabel = "Save",
+  disabled = false,
 }) {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [error, setError] = useState("");
+  const [formData, setFormData] = useState({
+    cardName: "",
+    cardId: "",
+    cardUrl: "",
+  });
 
-  // Populate form when editing
   useEffect(() => {
-    if (initialData) {
-      setTitle(initialData.title || "");
-      setDescription(initialData.description || "");
+    if (initialValues) {
+      setFormData({
+        cardName: initialValues.cardName || "",
+        cardId: initialValues.cardId || "",
+        cardUrl: initialValues.cardUrl || "",
+      });
     }
-  }, [initialData]);
+  }, [initialValues]);
+
+  function handleChange(e) {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  }
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    if (!title.trim() || !description.trim()) {
-      setError("All fields are required.");
-      return;
-    }
-
-    setError("");
-    onSubmit({
-      title,
-      description,
-    });
+    onSubmit(formData);
   }
+
+  const inputStyle = {
+    width: "100%",
+    padding: "14px 16px",
+    fontSize: "16px",
+    borderRadius: "8px",
+    border: "1px solid #ccc",
+    marginTop: "6px",
+  };
+
+  const fieldStyle = {
+    marginBottom: "16px",
+  };
 
   return (
     <form onSubmit={handleSubmit} style={{ maxWidth: "500px" }}>
-      {error && <p style={{ color: "red" }}>{error}</p>}
-
-      <div style={{ marginBottom: "1rem" }}>
-        <label>
-          Title
-          <br />
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            style={{ width: "100%", padding: "0.5rem" }}
-          />
-        </label>
+      <div style={fieldStyle}>
+        <label>Card Name</label>
+        <input
+          type="text"
+          name="cardName"
+          value={formData.cardName}
+          onChange={handleChange}
+          disabled={disabled}
+          required
+          style={inputStyle}
+        />
       </div>
 
-      <div style={{ marginBottom: "1rem" }}>
-        <label>
-          Description
-          <br />
-          <textarea
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            rows="4"
-            style={{ width: "100%", padding: "0.5rem" }}
-          />
-        </label>
+      <div style={fieldStyle}>
+        <label>Card ID</label>
+        <input
+          type="text"
+          name="cardId"
+          value={formData.cardId}
+          onChange={handleChange}
+          disabled={disabled}
+          required
+          style={inputStyle}
+        />
+      </div>
+
+      <div style={fieldStyle}>
+        <label>Card URL</label>
+        <input
+          type="url"
+          name="cardUrl"
+          value={formData.cardUrl}
+          onChange={handleChange}
+          disabled={disabled}
+          required
+          style={inputStyle}
+        />
       </div>
 
       <button
         type="submit"
+        disabled={disabled}
         style={{
-          padding: "0.6rem 1.2rem",
-          backgroundColor: "#2563eb",
-          color: "white",
-          border: "none",
-          borderRadius: "5px",
+          padding: "12px 20px",
+          fontSize: "16px",
+          borderRadius: "8px",
           cursor: "pointer",
         }}
       >

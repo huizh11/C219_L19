@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams, Link } from "react-router-dom";
 import CardForm from "../components/CardForm";
 
-// ✅ Matches your .env exactly
 const API_BASE = process.env.REACT_APP_API_URL;
 
 export default function EditCard() {
@@ -14,25 +13,31 @@ export default function EditCard() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
-  // Fetch existing card
+  // ✅ Fetch ALL cards, then filter by ID
   useEffect(() => {
     async function fetchCard() {
       setLoading(true);
       setError("");
 
       try {
-        if (!API_BASE) {
-          throw new Error("API URL is not configured");
-        }
-
-        const response = await fetch(`${API_BASE}/cards/${id}`);
+        const response = await fetch(`${API_BASE}/allcards`);
 
         if (!response.ok) {
-          throw new Error("Failed to fetch card details");
+          throw new Error("Unable to load card data");
         }
 
         const data = await response.json();
-        setInitialValues(data);
+
+        // find the card that matches the route param
+        const card = data.find(
+          (c) => String(c.id) === String(id)
+        );
+
+        if (!card) {
+          throw new Error("Card not found");
+        }
+
+        setInitialValues(card);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -43,14 +48,14 @@ export default function EditCard() {
     fetchCard();
   }, [id]);
 
-  // Update card
+  // ✅ Update card
   async function handleSubmit(updatedCard) {
     setSaving(true);
     setError("");
 
     try {
       const response = await fetch(`${API_BASE}/cards/${id}`, {
-        method: "PUT", // change to PATCH if your backend uses PATCH
+        method: "PUT", // must match backend
         headers: {
           "Content-Type": "application/json",
         },
@@ -61,7 +66,6 @@ export default function EditCard() {
         throw new Error("Failed to update card");
       }
 
-      // redirect after success
       navigate("/cards");
     } catch (err) {
       setError(err.message);
@@ -70,18 +74,15 @@ export default function EditCard() {
     }
   }
 
-  if (loading) {
-    return <p>Loading card...</p>;
-  }
+  if (loading) return <p>Loading card...</p>;
 
-  if (error) {
+  if (error)
     return (
       <div>
         <p style={{ color: "red" }}>{error}</p>
         <Link to="/cards">← Back to Cards</Link>
       </div>
     );
-  }
 
   return (
     <div>
