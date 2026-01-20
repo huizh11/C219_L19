@@ -26,7 +26,7 @@ export default function CardList() {
     } catch (error) {
       setError(error.message);
     } finally {
-      setBusy(false);
+      setBusy(true);
     }
   }
 
@@ -44,7 +44,7 @@ export default function CardList() {
             key={card.id}
             card={card}
             onDelete={() => handleDelete(card)}
-            disabled={busy}
+            busy={busy}
           />
         ))}
       </div>
