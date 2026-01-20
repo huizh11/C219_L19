@@ -1,38 +1,27 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function CardForm({
-  initialValues,
   onSubmit,
-  submitLabel = "Save",
-  disabled = false,
+  submitLabel = "Add Card",
+  busy = false,
 }) {
-  const [formData, setFormData] = useState({
-    cardName: "",
-    cardId: "",
-    cardUrl: "",
-  });
-
-  useEffect(() => {
-    if (initialValues) {
-      setFormData({
-        cardName: initialValues.cardName || "",
-        cardId: initialValues.cardId || "",
-        cardUrl: initialValues.cardUrl || "",
-      });
-    }
-  }, [initialValues]);
-
-  function handleChange(e) {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  }
+  const [card_name, setCardName] = useState("");
+  const [card_pic, setCardPic] = useState("");
+  const [error, setError] = useState("");
 
   function handleSubmit(e) {
     e.preventDefault();
-    onSubmit(formData);
+
+    if (!card_name.trim() || !card_pic.trim()) {
+      setError("All fields are required");
+      return;
+    }
+
+    setError("");
+    onSubmit({
+      card_name,
+      card_pic,
+    });
   }
 
   const inputStyle = {
@@ -49,57 +38,48 @@ export default function CardForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} style={{ maxWidth: "500px" }}>
-      <div style={fieldStyle}>
-        <label>Card Name</label>
+    <form onSubmit={handleSubmit} style={{ maxWidth: 500 }}>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      <label>
+        Card Name
         <input
           type="text"
-          name="cardName"
-          value={formData.cardName}
-          onChange={handleChange}
-          disabled={disabled}
-          required
-          style={inputStyle}
+          value={card_name}
+          disabled={busy}
+          onChange={(e) => setCardName(e.target.value)}
+          style={{ width: "100%", padding: 8 }}
         />
-      </div>
+      </label>
 
-      <div style={fieldStyle}>
-        <label>Card ID</label>
+      <br /><br />
+
+      <label>
+        Card Image URL
         <input
           type="text"
-          name="cardId"
-          value={formData.cardId}
-          onChange={handleChange}
-          disabled={disabled}
-          required
-          style={inputStyle}
+          value={card_pic}
+          disabled={busy}
+          onChange={(e) => setCardPic(e.target.value)}
+          style={{ width: "100%", padding: 8 }}
         />
-      </div>
+      </label>
 
-      <div style={fieldStyle}>
-        <label>Card URL</label>
-        <input
-          type="url"
-          name="cardUrl"
-          value={formData.cardUrl}
-          onChange={handleChange}
-          disabled={disabled}
-          required
-          style={inputStyle}
-        />
-      </div>
+      <br /><br />
 
       <button
         type="submit"
-        disabled={disabled}
+        disabled={busy}
         style={{
-          padding: "12px 20px",
-          fontSize: "16px",
-          borderRadius: "8px",
-          cursor: "pointer",
+          padding: "0.6rem 1.2rem",
+          backgroundColor: "#2563eb",
+          color: "white",
+          border: "none",
+          borderRadius: 6,
+          cursor: busy ? "not-allowed" : "pointer",
         }}
       >
-        {submitLabel}
+        {busy ? "Saving..." : submitLabel}
       </button>
     </form>
   );

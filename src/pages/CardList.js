@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import Card from "../components/Card";
 import { getCards, deleteCard } from "../services/api";
+import { Link } from "react-router-dom";
+
 
 export default function CardList() {
   const [cards, setCards] = useState([]);
@@ -36,20 +38,39 @@ export default function CardList() {
   }, []);
 
   return (
-    <main>
-      <h1>Card List</h1>
-      {error && <p>{error}</p>}
-      {loading && <p>Loading...</p>}
-      <div>
-        {cards.map(card => (
-          <Card
-            key={card.id}
-            card={card}
-            onDelete={() => handleDelete(card)}
-            busy={busy}
-          />
-        ))}
-      </div>
-    </main>
-  );
+  <main>
+    <h1>Card List</h1>
+
+    {/* ADD CARD BUTTON */}
+    <Link to="/add">
+      <button
+        style={{
+          marginBottom: "1rem",
+          padding: "0.6rem 1.2rem",
+          backgroundColor: "#2563eb",
+          color: "white",
+          border: "none",
+          borderRadius: "6px",
+          cursor: "pointer",
+        }}
+      >
+        + Add Card
+      </button>
+    </Link>
+
+    {error && <p>{error}</p>}
+    {loading && <p>Loading...</p>}
+
+    <div>
+      {cards.map(card => (
+        <Card
+          key={card.id}
+          card={card}
+          onDelete={() => handleDelete(card)}
+          busy={busy}
+        />
+      ))}
+    </div>
+  </main>
+);
 }

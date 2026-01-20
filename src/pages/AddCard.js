@@ -13,7 +13,7 @@ export default function AddCard() {
       setBusy(true);
       setError("");
       await addCard(cardData);
-      navigate("/cards");
+      navigate("/cards");   
     } catch {
       setError("Failed to add card");
     } finally {
