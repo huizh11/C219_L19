@@ -13,7 +13,7 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/cards" element={<CardList />} />
         <Route path="/add" element={<AddCard />} />
-        <Route path="/edit/:id" element={<EditCard />} />
+        <Route path="/cards/:id/edit" element={<EditCard />} />
 
         {/* fallback */}
         <Route path="*" element={<Navigate to="/" />} />
