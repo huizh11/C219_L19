@@ -13,7 +13,9 @@ export default function EditCard() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
-  // ✅ Fetch ALL cards, then filter by ID
+  // =========================
+  // Fetch card by ID
+  // =========================
   useEffect(() => {
     async function fetchCard() {
       setLoading(true);
@@ -28,7 +30,6 @@ export default function EditCard() {
 
         const data = await response.json();
 
-        // find the card that matches the route param
         const card = data.find(
           (c) => String(c.id) === String(id)
         );
@@ -37,7 +38,10 @@ export default function EditCard() {
           throw new Error("Card not found");
         }
 
-        setInitialValues(card);
+        setInitialValues({
+          card_name: card.card_name,
+          card_pic: card.card_pic,
+        });
       } catch (err) {
         setError(err.message);
       } finally {
@@ -48,18 +52,23 @@ export default function EditCard() {
     fetchCard();
   }, [id]);
 
-  // ✅ Update card
+  // =========================
+  // Update card
+  // =========================
   async function handleSubmit(updatedCard) {
     setSaving(true);
     setError("");
 
     try {
-      const response = await fetch(`${API_BASE}/cards/${id}`, {
-        method: "PUT", // must match backend
+      const response = await fetch(`${API_BASE}/updatecard/${id}`, {
+        method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(updatedCard),
+        body: JSON.stringify({
+          card_name: updatedCard.card_name,
+          card_pic: updatedCard.card_pic,
+        }),
       });
 
       if (!response.ok) {
@@ -74,6 +83,39 @@ export default function EditCard() {
     }
   }
 
+  // =========================
+  // Delete card
+  // =========================
+  async function handleDelete() {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this card?"
+    );
+
+    if (!confirmDelete) return;
+
+    setSaving(true);
+    setError("");
+
+    try {
+      const response = await fetch(`${API_BASE}/deletecard/${id}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to delete card");
+      }
+
+      navigate("/cards");
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  // =========================
+  // UI states
+  // =========================
   if (loading) return <p>Loading card...</p>;
 
   if (error)
@@ -84,6 +126,9 @@ export default function EditCard() {
       </div>
     );
 
+  // =========================
+  // Render
+  // =========================
   return (
     <div>
       <h2>Edit Card</h2>
@@ -92,9 +137,25 @@ export default function EditCard() {
         initialValues={initialValues}
         onSubmit={handleSubmit}
         submitLabel={saving ? "Saving..." : "Update Card"}
-        disabled={saving}
+        busy={saving}
       />
 
+      <button
+        onClick={handleDelete}
+        disabled={saving}
+        style={{
+          backgroundColor: "red",
+          color: "white",
+          padding: "10px",
+          marginTop: "10px",
+          border: "none",
+          cursor: "pointer",
+        }}
+      >
+        Delete Card
+      </button>
+
+      <br />
       <Link to="/cards">← Back to Cards</Link>
     </div>
   );

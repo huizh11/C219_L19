@@ -45,6 +45,9 @@ export default function Navbar() {
         <Link to="/add" style={linkStyle}>
           Add Card
         </Link>
+        <Link to="/login" style={linkStyle}>
+          Login
+        </Link>
 
       </div>
     </nav>
