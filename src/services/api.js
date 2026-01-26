@@ -4,14 +4,14 @@ const API_URL = process.env.REACT_APP_API_URL;
 
 // GET all cards
 export async function getCards() {
-  const res = await fetch(`${API_URL}allcards`);
+  const res = await fetch(`${API_URL}/allcards`);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
 
 // ADD card
 export async function addCard(card) {
-  const res = await fetch(`${API_URL}addcard`, {
+  const res = await fetch(`${API_URL}/addcard`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -26,7 +26,7 @@ export async function addCard(card) {
 
 // UPDATE card
 export async function updateCard(id, card) {
-  const res = await fetch(`${API_URL}updatecard/${id}`, {
+  const res = await fetch(`${API_URL}/updatecard/${id}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -40,7 +40,7 @@ export async function updateCard(id, card) {
 
 // DELETE card
 export async function deleteCard(id) {
-  const res = await fetch(`${API_URL}deletecard/${id}`, {
+  const res = await fetch(`${API_URL}/deletecard/${id}`, {
     method: "DELETE",
   });
 
