@@ -11,7 +11,7 @@ function authHeaders() {
 // =======================
 // LOGIN
 // =======================
-export async function login(username, password) {
+export async function login({ username, password }) {
   const res = await fetch(`${API_URL}/login`, {
     method: "POST",
     headers: {
