@@ -27,7 +27,6 @@ export default function CardList() {
     try {
       await deleteCard(card.id);
 
-      // ✅ remove deleted card from UI
       setCards(prevCards =>
         prevCards.filter(c => c.id !== card.id)
       );

@@ -5,16 +5,16 @@ import CardForm from "../components/CardForm";
 const API_BASE = process.env.REACT_APP_API_URL;
 
 export default function EditCard() {
-  const { id } = useParams();
-  const navigate = useNavigate();
+  const { id } = useParams(); // gets id from the render
+  const navigate = useNavigate(); // used to redirect to the cards list page after its being updated
 
-  const [initialValues, setInitialValues] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [initialValues, setInitialValues] = useState(null); // stores existing card data
+  const [loading, setLoading] = useState(true); // shows loading card while fetching data
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
   // =========================
-  // Fetch card by ID
+  // Fetch card from the backend by ID
   // =========================
   useEffect(() => {
     async function fetchCard() {
@@ -53,7 +53,7 @@ export default function EditCard() {
   }, [id]);
 
   // =========================
-  // Update card
+  // Update card by ID
   // =========================
   async function handleSubmit(updatedCard) {
     setSaving(true);
@@ -84,7 +84,7 @@ export default function EditCard() {
   }
 
   // =========================
-  // Delete card
+  // Delete card by the ID
   // =========================
   async function handleDelete() {
     const confirmDelete = window.confirm(
