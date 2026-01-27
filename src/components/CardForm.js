@@ -32,7 +32,7 @@ export default function CardForm({
       card_name,
       card_pic,
     });
-    // Send form data to parent component
+    // Send form data to parent component (Add Card)
   }
 
   /* ---------- inline styles ---------- */
