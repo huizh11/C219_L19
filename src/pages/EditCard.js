@@ -53,7 +53,7 @@ export default function EditCard() {
   }, [id]);
 
   // =========================
-  // Update card by ID
+  // Update card from the backend by ID
   // =========================
   async function handleSubmit(updatedCard) {
     setSaving(true);
@@ -84,7 +84,7 @@ export default function EditCard() {
   }
 
   // =========================
-  // Delete card by the ID
+  // Delete card from the backend by the ID
   // =========================
   async function handleDelete() {
     const confirmDelete = window.confirm(
@@ -156,7 +156,7 @@ export default function EditCard() {
       </button>
 
       <br />
-      <Link to="/cards">← Back to Cards</Link>
+      <Link to="/cards">← Back to Cards</Link> 
     </div>
   );
 }

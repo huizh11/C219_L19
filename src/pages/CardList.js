@@ -3,12 +3,14 @@ import Card from "../components/Card";
 import { getCards, deleteCard } from "../services/api";
 import { Link } from "react-router-dom";
 
+//fetches card data frm backend, stores it in stateS
 export default function CardList() {
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
 
+  //display list of cards using Card component
   async function load() {
     try {
       const data = await getCards();
@@ -20,6 +22,7 @@ export default function CardList() {
     }
   }
 
+  //handles error states and delete by calling backend
   async function handleDelete(card) {
     setBusy(true);
     setError(null);

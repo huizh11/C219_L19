@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 
+//displaying card details
 export default function Card({ card, onDelete, busy }) {
   return (
     <div
@@ -46,6 +47,7 @@ export default function Card({ card, onDelete, busy }) {
           Edit
         </Link>
 
+{/* //provides edit del options */}
         <button
           onClick={() => onDelete(card)}
           disabled={busy}
