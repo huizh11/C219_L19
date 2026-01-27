@@ -1,30 +1,41 @@
 import { useState } from "react";
+// React hook for managing form state
 
 export default function CardForm({
-  onSubmit,
-  submitLabel = "Add Card",
-  busy = false,
+  onSubmit,                 // Handles form submission (from parent)
+  submitLabel = "Add Card", // Form title and button text
+  busy = false,             // Controls loading / disabled state
 }) {
+
   const [card_name, setCardName] = useState("");
+  // Stores card name input
+
   const [card_pic, setCardPic] = useState("");
+  // Stores card image URL input
+
   const [error, setError] = useState("");
+  // Stores validation error message
 
   function handleSubmit(e) {
     e.preventDefault();
+    // Prevent page refresh
 
     if (!card_name.trim() || !card_pic.trim()) {
       setError("All fields are required");
       return;
     }
+    // Validate input fields
 
     setError("");
+
     onSubmit({
       card_name,
       card_pic,
     });
+    // Send form data to parent component
   }
 
-  /* ---------- styles ---------- */
+  /* ---------- inline styles ---------- */
 
   const formStyle = {
     maxWidth: 480,
@@ -36,9 +47,7 @@ export default function CardForm({
     fontFamily: "system-ui, -apple-system, BlinkMacSystemFont",
   };
 
-  const fieldStyle = {
-    marginBottom: "18px",
-  };
+  const fieldStyle = { marginBottom: "18px" };
 
   const labelStyle = {
     display: "block",
@@ -75,7 +84,6 @@ export default function CardForm({
     border: "none",
     borderRadius: "10px",
     cursor: busy ? "not-allowed" : "pointer",
-    transition: "background-color 0.2s",
   };
 
   return (
@@ -85,6 +93,7 @@ export default function CardForm({
       </h2>
 
       {error && <div style={errorStyle}>{error}</div>}
+      {/* Show validation error */}
 
       <div style={fieldStyle}>
         <label style={labelStyle}>Card Name</label>
@@ -94,7 +103,6 @@ export default function CardForm({
           disabled={busy}
           onChange={(e) => setCardName(e.target.value)}
           style={inputStyle}
-          placeholder="Enter card name"
         />
       </div>
 
@@ -106,7 +114,6 @@ export default function CardForm({
           disabled={busy}
           onChange={(e) => setCardPic(e.target.value)}
           style={inputStyle}
-          placeholder="https://example.com/image.jpg"
         />
       </div>
 
